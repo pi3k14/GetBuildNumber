@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<!-- Assembly containing the Task-->
+		<GetBuildNumberAssembly>$(MSBuildThisFileDirectory)..\lib\netstandard2.0\$(MSBuildThisFileName).dll</GetBuildNumberAssembly>
+	</PropertyGroup>
+
+	<!--Register our custom task-->
+	<UsingTask TaskName="$(MSBuildThisFileName).GetBuildNumber" AssemblyFile="$(GetBuildNumberAssembly)"/>
+
+</Project>

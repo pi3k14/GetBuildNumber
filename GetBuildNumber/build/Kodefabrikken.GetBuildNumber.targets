@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Generate build number and revision 
+		- days since January 1th 2025
+		- seconds since midnight divided by two -->
+  <Target Name="GetBuildNumber" BeforeTargets="BeforeBuild">
+    <GetBuildNumber>
+      <Output TaskParameter="Build" PropertyName="BuildNumber" />
+      <Output TaskParameter="Revision" PropertyName="BuildRevision" />
+    </GetBuildNumber>
+  </Target>
+
+  <!-- Replace build and private parts in FileVersion.
+	  Either by environment variable BUILD_BUILDNUMBER, if defined, or properties BuildNumber and BuildRevision
+		Only replaced if FileVersion of format x.y.0[.0], not building from VS or SetBuildNumber is true -->
+  <Target Name="SetBuildNumber" DependsOnTargets="GetBuildNumber" BeforeTargets="GetAssemblyVersion"
+          Condition="'$(BuildingInsideVisualStudio)' != 'true' Or '$(SetBuildNumber)' == 'true'">
+    <PropertyGroup>
+      <BUILD_BUILDNUMBER Condition="'$(BUILD_BUILDNUMBER)' == ''">$(BuildNumber).$(BuildRevision)</BUILD_BUILDNUMBER>
+
+      <!-- RegEx to check if build number has format x.y.0[.0] -->
+      <FileVersionRegEx>(\d+\.\d+\.)0(?:\.0)?</FileVersionRegEx>
+
+      <!-- Substitution pattern for RegEx. %24 escape of $, {1} first captured group -->
+      <BuildNumberSubstitution>%24{1}$(BUILD_BUILDNUMBER)</BuildNumberSubstitution>
+
+      <FileVersion>$([System.Text.RegularExpressions.RegEx]::Replace($(FileVersion), $(FileVersionRegEx), $(BuildNumberSubstitution)))</FileVersion>
+    </PropertyGroup>
+  </Target>
+</Project>

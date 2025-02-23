@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <Version>1.0.0</Version>
+    <Title>Get build number</Title>
+    <Authors>Frode Nilsen</Authors>
+    <Description>MSBuild task to append build number to FileVersion. Either from environment variable or generated based on time.</Description>
+    <Copyright>Copyright © 2025 Frode Nilsen.</Copyright>
+    
+    <!-- we need the assemblies bundled, so set this so we don't expose any dependencies to the outside world -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <DebugType>embedded</DebugType>
+    <IsPackable>true</IsPackable>
+    <Company>Kodefabrikken</Company>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageTags>MSBuild;Task;BuildNumber</PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <FileVersion>1.0.0</FileVersion>
+    <PackageIcon>icon.png</PackageIcon>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/pi3k14/GetBuildNumber</RepositoryUrl>
+    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.12.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- these lines pack the build props/targets files to the `build` folder in the generated package.
+         by convention, the .NET SDK will look for build\<Package Id>.props and build\<Package Id>.targets
+         for automatic inclusion in the build. -->
+    <Content Include="build\Kodefabrikken.GetBuildNumber.props" PackagePath="build\" />
+    <Content Include="build\Kodefabrikken.GetBuildNumber.targets" PackagePath="build\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
